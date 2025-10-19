@@ -2,28 +2,29 @@ const axios = require('axios');
 
 const getLanguageById = (lang) => {
   const language = {
-    "c++": 105,
-    "c": 103,
-    "java": 91,
-    "javascript": 102,
-    "python": 109
+    "c": 50,
+    "c++": 54,
+    "java": 62,
+    "javascript": 63,
+    "python": 71
   };
 
   return language[lang.toLowerCase()];
 };
 
 const submitBatch = async (submissions) => {
+console.log("Submitting:", JSON.stringify({ submissions }, null, 2));
 
   const options = {
     method: 'POST',
     url: 'https://judge0-ce.p.rapidapi.com/submissions/batch',
     params: {
       base64_encoded: 'false',
-      // wait: 'false',
+      wait: 'false',
       // fields: '*'
     },
     headers: {
-      'x-rapidapi-key': '5c1fc8d260msh1b48af1f8c0c18cp1d6544jsn05cb3c6632aa',
+      'x-rapidapi-key': process.env.JUDGE0_KEY,
       'x-rapidapi-host': 'judge0-ce.p.rapidapi.com',
       'Content-Type': 'application/json'
     },
@@ -54,7 +55,7 @@ const submitToken = async (resultToken) => {
       fields: '*'
     },
     headers: {
-      'x-rapidapi-key': '5c1fc8d260msh1b48af1f8c0c18cp1d6544jsn05cb3c6632aa',
+      'x-rapidapi-key': process.env.JUDGE0_KEY,
       'x-rapidapi-host': 'judge0-ce.p.rapidapi.com'
     }
   };

@@ -17,7 +17,7 @@ problemRouter.delete("/delete/:id", adminMiddleware, deleteProblem);
 // for user
 problemRouter.get("/problemById/:id", userMiddleware, getProblemById);
 problemRouter.get("/getAllProblem", userMiddleware, getAllProblem);
-// problemRouter.get("/problemSolvedByUser", userMiddleware, solvedAllProblembyUser);
+problemRouter.get("/problemSolvedByUser", userMiddleware, solvedAllProblembyUser);
 
 
 

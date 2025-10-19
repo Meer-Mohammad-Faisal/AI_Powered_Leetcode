@@ -36,6 +36,7 @@ const submissionSchema = new Schema({
             'memory_limit_exceeded',
             'runtime_error',
             'compilation_error',
+            'error',
             'failed'
         ],
         default: 'pending'

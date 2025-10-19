@@ -38,7 +38,7 @@ const problemSchema = new Schema({
         }
     ],
 
-    hiddenTestCases:[
+    hiddenTestCases:[ 
         {
             input:{
                 type: String,
