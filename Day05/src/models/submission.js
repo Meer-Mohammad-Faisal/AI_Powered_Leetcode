@@ -71,10 +71,10 @@ const submissionSchema = new Schema({
     timestamps: true
 });
 
-// // indexes for common queries
-// SubmissionSchema.index({ user: 1, problem: 1 });
+// indexes for common queries
+submissionSchema.index({ userId: 1, problemId: 1 });
 // SubmissionSchema.index({ problem: 1, status: 1 });
 
 const Submission = mongoose.model('submission', submissionSchema)
 
-module.exports = Submission;
+module.exports = Submission; 

@@ -1,6 +1,7 @@
 const {getLanguageById, submitBatch, submitToken} = require("../utils/problemUtility");
 const Problem = require("../models/problem");
 const User = require("../models/user");
+const Submission = require("../models/submission");
 
 
 const createProblem = async (req, res) =>{
@@ -200,4 +201,49 @@ const solvedAllProblembyUser = async (req, res) =>{
 }
 
 
-module.exports = {createProblem, updateProblem, deleteProblem, getProblemById, getAllProblem, solvedAllProblembyUser};
+const submittedProblem = async(req, res) => {
+    try{
+        const userId = req.result._id;
+        const problemId = req.params.pid;
+
+        const ans = await Submission.find({userId,problemId});
+
+        if(ans.length == 0) {
+            res.send(200).send("No Submission is Present");
+        }
+        res.status(200).send(ans);
+    }catch(err){
+        res.status(500).send("internal Server Error");
+    }
+}
+
+
+
+// const SUBMISSION_COOLDOWN_MS = 10 * 1000;
+
+// const submissionRateLimiter = async (req, res, next) => {
+//     try {
+//         const userId = req.result && req.result._id;
+//         if (!userId) return res.status(401).send("Unauthorized");
+
+//         const lastSubmission = await Submission.findOne({ userId }).sort({ createdAt: -1 }).select("createdAt");
+
+//         if (lastSubmission) {
+//             const elapsed = Date.now() - new Date(lastSubmission.createdAt).getTime();
+//             if (elapsed < SUBMISSION_COOLDOWN_MS) {
+//                 const waitSeconds = Math.ceil((SUBMISSION_COOLDOWN_MS - elapsed) / 1000);
+//                 return res.status(429).send(`Please wait ${waitSeconds} second(s) before submitting again`);
+//             }
+//         }
+
+//         next();
+//     } catch (err) {
+//         res.status(500).send("Rate limiter error");
+//     }
+// };
+
+// exports.submissionRateLimiter = submissionRateLimiter;
+
+
+
+module.exports = {createProblem, updateProblem, deleteProblem, getProblemById, getAllProblem, solvedAllProblembyUser, submittedProblem};
