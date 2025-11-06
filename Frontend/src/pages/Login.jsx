@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { loginUser } from "../authSlice";
 import { useEffect } from "react";
+import { NavLink } from "react-router";
 
 const signupSchema = z.object({
     emailId: z.string().email("Invalid Email"),
@@ -69,6 +70,14 @@ function Login(){
                         </button>
                        </div>
                     </form>
+                    <div className="text-center mt-6">
+                        <span className="text-sm">
+                            New user?{' '}
+                            <NavLink to="/signup" className='link link-primary'>
+                                Signup
+                            </NavLink>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>     

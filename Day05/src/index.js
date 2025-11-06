@@ -10,9 +10,9 @@ const submitRouter = require("./routes/submit");
 const cors = require('cors');
 
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
-}))
+    origin: "http://localhost:5173", // or your frontend port
+    credentials: true, // ✅ this is VERY IMPORTANT for cookies
+}));
 
 app.use(express.json());
 app.use(cookieParser());

@@ -5,11 +5,11 @@ export const registerUser = createAsyncThunk(
     'auth/register',
     async (userData, { rejectWithValue }) => {
         try {
-            const response = await axiosClient.post('user/register', userData);
+            const response = await axiosClient.post('/user/register', userData);
             return response.data.user;
         }
         catch(error) {
-            return rejectWithValue(error);
+            return rejectWithValue(error.response?.data?.message || error.message);
         }
     }
 );
@@ -18,7 +18,7 @@ export const loginUser = createAsyncThunk(
     'auth/login',
     async (credentials, { rejectWithValue }) => {
         try {
-            const response = await axiosClient.post('user/login', credentials);
+            const response = await axiosClient.post('/user/login', credentials);
             return response.data.user;
         }
         catch(error) {
@@ -28,23 +28,28 @@ export const loginUser = createAsyncThunk(
 );
 
 export const checkAuth = createAsyncThunk(
-    'auth/check',
-    async (_, { rejectWithValue }) => {
-        try {
-            const { data } = await axiosClient.get('user/check');
-            return data.user;
-        }
-        catch(error) {
-            return rejectWithValue(error);
-        }
+  'auth/check',
+  async (_, { rejectWithValue }) => {
+    try {
+      
+      const { data } = await axiosClient.get('/user/check', {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
+      return data.user;
+    } catch (error) {
+      // handle gracefully
+       const message = error.response?.data?.message || "Authentication failed";
+      return rejectWithValue(message);
     }
+  }
 );
+ 
 
 export const logoutUser = createAsyncThunk(
     'auth/logout',
     async (_, { rejectWithValue }) => {
         try {
-            await axiosClient.post('user/logout'); // Fixed: removed leading slash or use correct endpoint
+            await axiosClient.post('/user/logout'); // Fixed: removed leading slash or use correct endpoint
             return null;
         }
         catch(error) {

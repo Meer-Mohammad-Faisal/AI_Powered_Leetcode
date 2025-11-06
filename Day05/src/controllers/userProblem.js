@@ -151,19 +151,34 @@ const getProblemById = async (req, res) =>{
     const {id} = req.params;
     try{
         if(!id){
-            return res.status(400).send("ID is missing");
+            return res.status(400).json({ error: "ID is missing" });
         }
  
-        const getProblem = await Problem.findById(id).select('_id title description difficulty tags visibleTestcases startCode');
+        const getProblem = await Problem.findById(id).select('_id title description difficulty tags visibleTestCases hiddenTestCases startCode refrenceSolution');
 
         if(!getProblem){
-            return res.status(404).send("Problem is Missinng");
+            return res.status(404).json({ error: "Problem not found" });
         }
-         res.status(200).send(getProblem);
-        }
-        catch(err){
-            res.status(500).send("Error "+err);
-        }
+        
+        // Transform the data for frontend
+        const problemData = {
+            _id: getProblem._id,
+            title: getProblem.title,
+            description: getProblem.description,
+            difficulty: getProblem.difficulty,
+            tags: getProblem.tags,
+            visibleTestCases: getProblem.visibleTestCases || [],
+            hiddenTestCases: getProblem.hiddenTestCases || [],
+            startCode: getProblem.startCode || [],
+            refrenceSolution: getProblem.refrenceSolution || []
+        };
+
+        res.status(200).json(problemData);
+    }
+    catch(err){
+        console.error('Error fetching problem:', err);
+        res.status(500).json({ error: "Internal server error" });
+    }
 }
 
 const getAllProblem = async (req, res) =>{

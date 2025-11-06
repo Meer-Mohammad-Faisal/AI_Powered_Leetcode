@@ -7,6 +7,8 @@ const Submission = require('../models/submission');
 
 const register = async (req, res) => {
     try{
+
+         //console.log("📩 Received register request:", req.body); // 👈 Add this line first
         // validate the data:
         validate(req.body);
         const {firstName, emailId, password} = req.body;
@@ -20,7 +22,8 @@ const register = async (req, res) => {
         const reply = {
             firstName: user.firstName,
             emailId: user.emailId,
-            _id: user._id
+            _id: user._id,
+            role: user.role,
         }
         
         res.cookie('token', token, {maxAge: 60*60*1000});
@@ -51,7 +54,7 @@ const login = async (req, res) => {
         // extracting email, password:
         const user = await User.findOne({emailId});
 
-        const match = bcrypt.compare(password, user.password);
+        const match = await bcrypt.compare(password, user.password);
 
         if(!match)
             throw new Error("Invalid Credentials");
@@ -59,7 +62,8 @@ const login = async (req, res) => {
         const reply = {
             firstName: user.firstName,
             emailId: user.emailId,
-            _id: user._id
+            _id: user._id,
+            role: user.role
         }
 
         const token = jwt.sign({_id:user._id, emailId, role:user.role}, process.env.JWT_KEY, {expiresIn: 60*60});
